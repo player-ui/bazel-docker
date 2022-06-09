@@ -33,7 +33,8 @@ ENV ANDROID_VERSION=29 \
 RUN sudo ${ANDROID_TOOLS}/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools" \
-    "ndk;${ANDROID_NDK_VERSION}"
+    "ndk;${ANDROID_NDK_VERSION}" \
+    "system-images;android-28;default;x86"
 
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
