@@ -53,6 +53,10 @@ RUN sudo ${ANDROID_TOOLS}/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}
     "ndk;${ANDROID_NDK_VERSION}" \
     "system-images;android-28;default;x86"
 
+RUN sudo ${ANDROID_TOOLS}/avdmanager create avd --force --name "testEmulator" \
+    --package "system-images;android-28;default;x86" \
+    --abi "x86"
+
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
     PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_TOOLS}

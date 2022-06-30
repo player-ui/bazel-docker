@@ -3,7 +3,7 @@ name: docker-image-ci
 on:
   push:
     branches:
-      - 'main'
+      - 'android-test-deps'
 
 jobs:
   docker:
