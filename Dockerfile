@@ -53,7 +53,9 @@ RUN sudo ${ANDROID_TOOLS}/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}
     "ndk;${ANDROID_NDK_VERSION}" \
     "system-images;android-28;default;x86"
 
-RUN sudo echo "no" | ${ANDROID_TOOLS}/avdmanager create avd --force --name "testEmulator" \
+RUN sudo chmod +x ${ANDROID_TOOLS}/avdmanager
+
+RUN no | ${ANDROID_TOOLS}/avdmanager create avd --force --name "testEmulator" \
     --package "system-images;android-28;default;x86" \
     --abi "x86"
 
