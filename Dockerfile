@@ -32,6 +32,7 @@ RUN wget -q https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_S
 
 RUN wget -q https://dl.google.com/android/repository/emulator-linux_x64-8420304.zip -O emulator.zip && \
     sudo unzip emulator.zip -d ${ANDROID_HOME} && \
+    sudo ln -s ${ANDROID_HOME}/emulator/emulator /usr/local/bin/emulator && \
     rm emulator.zip
 
 ADD license_accepter.sh ${ANDROID_HOME}
