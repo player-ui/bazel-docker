@@ -60,7 +60,7 @@ RUN sudo echo "no"  | ${ANDROID_TOOLS}/avdmanager create avd --force --name "tes
     --package "system-images;android-28;default;x86" \
     --abi "x86"
 
-RUN sudo apt-get install pulseaudio
+RUN sudo apt-get install libpulse0
 
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
