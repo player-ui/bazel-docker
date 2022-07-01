@@ -60,6 +60,8 @@ RUN sudo echo "no"  | ${ANDROID_TOOLS}/avdmanager create avd --force --name "tes
     --package "system-images;android-28;default;x86" \
     --abi "x86"
 
+RUN sudo emulator -list-avds
+
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
     PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_TOOLS}
