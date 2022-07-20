@@ -38,3 +38,5 @@ RUN sudo ${ANDROID_TOOLS}/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
     PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_TOOLS}
+
+RUN sudo ln -s /usr/bin/python3 /usr/bin/python
