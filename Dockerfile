@@ -40,3 +40,15 @@ ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_TOOLS}
 
 RUN sudo ln -s /usr/bin/python3 /usr/bin/python
+
+ARG RUBY_VERSION=2.7.2
+
+SHELL ["/bin/bash", "-l", "-c"]
+
+# Install rbenv
+RUN sudo apt-get update && sudo apt-get install rbenv -y
+RUN mkdir -p "$(rbenv root)"/plugins
+RUN git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+RUN echo 'eval "$(rbenv init -)"' > ~/.bashrc
+RUN rbenv install $RUBY_VERSION
+RUN rbenv global $RUBY_VERSION
