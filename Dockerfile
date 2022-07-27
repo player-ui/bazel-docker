@@ -2,19 +2,6 @@ FROM cimg/openjdk:8.0-node as base_image
 
 LABEL maintainer="Jeremiah Zucker <zucker.jeremiah@gmail.com>"
 
-ENV PYTHON_VERSION 2.7.18
-
-RUN wget -q https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz -O python && \
-    sudo mkdir /python2 && \
-    sudo tar -xzf python -C /python2 && \
-    sudo chmod +x /python2/Python-2.7.18/configure &&  \
-    sudo /python2/Python-2.7.18/configure &&  \
-    sudo make &&  \
-    sudo make install &&  \
-    sudo rm -rf /python2 && \
-    rm python && \
-    sudo ln -s /usr/local/bin/python2 /usr/bin/python2
-
 ENV BAZELISK_VERSION 1.11.0
 RUN wget -q https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-amd64 -O bazelisk && \
     chmod +x bazelisk && \
@@ -29,11 +16,6 @@ RUN wget -q https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_S
     sudo mkdir ${ANDROID_HOME} && \
     sudo unzip sdk.zip -d ${ANDROID_HOME} && \
     rm sdk.zip
-
-RUN wget -q https://dl.google.com/android/repository/emulator-linux_x64-8420304.zip -O emulator.zip && \
-    sudo unzip emulator.zip -d ${ANDROID_HOME} && \
-    sudo ln -s ${ANDROID_HOME}/emulator/emulator /usr/local/bin/emulator && \
-    rm emulator.zip
 
 ADD license_accepter.sh ${ANDROID_HOME}
 RUN sudo chmod +x ${ANDROID_HOME}/license_accepter.sh && \
@@ -51,16 +33,7 @@ ENV ANDROID_VERSION=29 \
 RUN sudo ${ANDROID_TOOLS}/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools" \
-    "ndk;${ANDROID_NDK_VERSION}" \
-    "system-images;android-28;default;x86"
-
-RUN sudo chmod +x ${ANDROID_TOOLS}/avdmanager
-
-RUN sudo echo "no"  | ${ANDROID_TOOLS}/avdmanager create avd --force --name "testEmulator" \
-    --package "system-images;android-28;default;x86" \
-    --abi "x86"
-
-RUN sudo apt-get install libpulse0
+    "ndk;${ANDROID_NDK_VERSION}"
 
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
