@@ -19,7 +19,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            player-ui/bazel-docker
+            playerui/bazel-docker
           tags: |
             type=sha
 
