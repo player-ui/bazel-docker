@@ -1,4 +1,4 @@
-FROM cimg/openjdk:8.0-node as base_image
+FROM cimg/openjdk:8.0 as base_image
 
 LABEL maintainer="Jeremiah Zucker <zucker.jeremiah@gmail.com>"
 
