@@ -53,6 +53,14 @@ RUN echo 'eval "$(rbenv init -)"' > ~/.bashrc
 RUN rbenv install $RUBY_VERSION
 RUN rbenv global $RUBY_VERSION
 
+# Install node
+ENV YARN_VERSION=16.15.0
+RUN [[ $(uname -m) == "x86_64" ]] && ARCH="x64" || ARCH="arm64" && \
+	curl -L -o node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz" && \
+	sudo tar -xJf node.tar.xz -C /usr/local --strip-components=1 && \
+	rm node.tar.xz nodeAliases.txt && \
+	sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
+
 # Install yarn
 ENV YARN_VERSION=1.22.19
 RUN curl -L -o yarn.tar.gz "https://yarnpkg.com/downloads/${YARN_VERSION}/yarn-v${YARN_VERSION}.tar.gz" && \
