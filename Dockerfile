@@ -1,4 +1,4 @@
-FROM cimg/openjdk:8.0-node as base_image
+FROM cimg/openjdk:8.0 as base_image
 
 LABEL maintainer="Jeremiah Zucker <zucker.jeremiah@gmail.com>"
 
@@ -39,7 +39,7 @@ ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
     PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_TOOLS}
 
-RUN sudo ln -s /usr/bin/python3 /usr/bin/python
+RUN sudo ln -sf /usr/bin/python3 /usr/bin/python
 
 ARG RUBY_VERSION=2.7.2
 
