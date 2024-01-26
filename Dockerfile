@@ -54,7 +54,7 @@ RUN rbenv install $RUBY_VERSION
 RUN rbenv global $RUBY_VERSION
 
 # Install node
-ENV YARN_VERSION=16.15.0
+ENV NODE_VERSION=16.15.0
 RUN [[ $(uname -m) == "x86_64" ]] && ARCH="x64" || ARCH="arm64" && \
 	curl -L -o node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz" && \
 	sudo tar -xJf node.tar.xz -C /usr/local --strip-components=1 && \
