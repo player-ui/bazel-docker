@@ -46,7 +46,7 @@ ARG RUBY_VERSION=2.7.2
 SHELL ["/bin/bash", "-l", "-c"]
 
 # Install rbenv
-RUN sudo apt-get update && sudo apt-get install rbenv -y && rm -rf /var/lib/apt/lists/*
+RUN sudo apt-get update && sudo apt-get install rbenv -y && sudo rm -rf /var/lib/apt/lists/*
 RUN mkdir -p "$(rbenv root)"/plugins
 RUN git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 RUN echo 'eval "$(rbenv init -)"' > ~/.bashrc
