@@ -26,8 +26,8 @@ ENV ANDROID_TOOLS=${ANDROID_HOME}/tools/bin
 RUN yes | sudo ${ANDROID_TOOLS}/sdkmanager --licenses || if [ $? -ne '141' ]; then exit $?; fi; \
     yes | sudo ${ANDROID_TOOLS}/sdkmanager --update || if [ $? -ne '141' ]; then exit $?; fi;
 
-ENV ANDROID_VERSION=29 \
-    ANDROID_BUILD_TOOLS_VERSION=30.0.0 \
+ENV ANDROID_VERSION=31 \
+    ANDROID_BUILD_TOOLS_VERSION=30.0.2 \
     ANDROID_NDK_VERSION=21.4.7075529
 
 RUN sudo ${ANDROID_TOOLS}/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
@@ -39,7 +39,7 @@ ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
     PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_TOOLS}
 
-RUN sudo ln -s /usr/bin/python3 /usr/bin/python
+RUN sudo ln -sf /usr/bin/python3 /usr/bin/python
 
 ARG RUBY_VERSION=2.7.2
 
