@@ -26,8 +26,8 @@ ENV ANDROID_TOOLS=${ANDROID_HOME}/tools/bin
 RUN yes | sudo ${ANDROID_TOOLS}/sdkmanager --licenses || if [ $? -ne '141' ]; then exit $?; fi; \
     yes | sudo ${ANDROID_TOOLS}/sdkmanager --update || if [ $? -ne '141' ]; then exit $?; fi;
 
-ENV ANDROID_VERSION=29 \
-    ANDROID_BUILD_TOOLS_VERSION=30.0.0 \
+ENV ANDROID_VERSION=31 \
+    ANDROID_BUILD_TOOLS_VERSION=30.0.2 \
     ANDROID_NDK_VERSION=21.4.7075529
 
 RUN sudo ${ANDROID_TOOLS}/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
