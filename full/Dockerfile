@@ -2,7 +2,7 @@ FROM cimg/openjdk:8.0-node as base_image
 
 LABEL maintainer="Jeremiah Zucker <zucker.jeremiah@gmail.com>"
 
-ENV BAZELISK_VERSION 1.11.0
+ENV BAZELISK_VERSION 1.20.0
 RUN wget -q https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-amd64 -O bazelisk && \
     chmod +x bazelisk && \
     sudo mkdir /opt/bazelisk-v${BAZELISK_VERSION} && \
