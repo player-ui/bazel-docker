@@ -2,7 +2,7 @@ FROM cimg/openjdk:8.0-node as base_image
 
 LABEL maintainer="Jeremiah Zucker <zucker.jeremiah@gmail.com>"
 
-ENV BAZELISK_VERSION 1.11.0
+ENV BAZELISK_VERSION 1.20.0
 RUN wget -q https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-amd64 -O bazelisk && \
     chmod +x bazelisk && \
     sudo mkdir /opt/bazelisk-v${BAZELISK_VERSION} && \
@@ -39,7 +39,7 @@ ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
     PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_TOOLS}
 
-# RUN sudo ln -s /usr/bin/python3 /usr/bin/python
+RUN sudo ln -sf /usr/bin/python3 /usr/bin/python
 
 ARG RUBY_VERSION=2.7.2
 
