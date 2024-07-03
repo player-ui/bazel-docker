@@ -28,17 +28,12 @@ RUN yes | sudo ${CMD_LINE_TOOLS}/bin/sdkmanager --update || if [ $? -ne '141' ];
 
 ENV ANDROID_VERSION=33 \
     ANDROID_BUILD_TOOLS_VERSION=33.0.1 \
-    ANDROID_NDK_VERSION=21.4.7075529
+    ANDROID_NDK_VERSION=23.2.8568313
 
 RUN sudo /opt/android/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.1" \
     "platforms;android-33" \
-    "platform-tools"
-
-RUN wget -q https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip -O ndk.zip \
-    && sudo mkdir -p ${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
-    && sudo unzip -q ndk.zip -d /tmpNdk/ \
-    && sudo mv /tmpNdk/android-ndk-r21e/* ${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
-    && rm ndk.zip
+    "platform-tools" \
+    "ndk;23.2.8568313"
 
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
