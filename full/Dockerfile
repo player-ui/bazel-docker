@@ -11,23 +11,20 @@ RUN wget -q https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK
 
 ENV SDK_TOOLS_VERSION=7302050 \
     ANDROID_HOME=/opt/android \
-    CMD_LINE_TOOLS=/opt/android/cmdline-tools \
-    CMD_LINE_TOOLS_ONE=/opt/android/cmdline-tools/latest
+    CMD_LINE_TOOLS=/opt/android/cmdline-tools
 
 RUN wget -q https://dl.google.com/android/repository/commandlinetools-linux-${SDK_TOOLS_VERSION}_latest.zip -O commandlinetools.zip \
-    && sudo mkdir -p ${ANDROID_HOME}/cmdline-tools \
+    && sudo mkdir -p ${CMD_LINE_TOOLS} \
     && sudo unzip -q commandlinetools.zip -d /tmp/ \
-    && sudo mv /tmp/cmdline-tools/ ${ANDROID_HOME}/cmdline-tools/latest \
+    && sudo mv /tmp/cmdline-tools/ ${CMD_LINE_TOOLS}/latest \
     && rm commandlinetools.zip
 
 ADD license_accepter.sh ${ANDROID_HOME}
 RUN sudo chmod +x ${ANDROID_HOME}/license_accepter.sh && \
     sudo ${ANDROID_HOME}/license_accepter.sh ${ANDROID_HOME}
 
-ENV PATH ${PATH}:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/cmdline-tools/latest/bin
-
-RUN yes | sudo /opt/android/cmdline-tools/latest/bin/sdkmanager --licenses || if [ $? -ne '141' ]; then exit $?; fi;
-RUN yes | sudo /opt/android/cmdline-tools/latest/bin/sdkmanager --update || if [ $? -ne '141' ]; then exit $?; fi;
+RUN yes | sudo ${CMD_LINE_TOOLS}/bin/sdkmanager --licenses || if [ $? -ne '141' ]; then exit $?; fi;
+RUN yes | sudo ${CMD_LINE_TOOLS}/bin/sdkmanager --update || if [ $? -ne '141' ]; then exit $?; fi;
 
 ENV ANDROID_VERSION=33 \
     ANDROID_BUILD_TOOLS_VERSION=33.0.1 \
@@ -50,3 +47,13 @@ ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
 RUN sudo ln -sf /usr/bin/python3 /usr/bin/python
 
 ARG RUBY_VERSION=2.7.2
+
+SHELL ["/bin/bash", "-l", "-c"]
+
+# Install rbenv
+RUN sudo apt-get update && sudo apt-get install rbenv -y && sudo rm -rf /var/lib/apt/lists/*
+RUN mkdir -p "$(rbenv root)"/plugins
+RUN git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+RUN echo 'eval "$(rbenv init -)"' > ~/.bashrc
+RUN rbenv install $RUBY_VERSION
+RUN rbenv global $RUBY_VERSION
