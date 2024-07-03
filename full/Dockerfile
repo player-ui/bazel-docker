@@ -40,7 +40,7 @@ RUN sudo /opt/android/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.1" \
 RUN wget -q https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip -O ndk.zip \
     && sudo mkdir -p ${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
     && sudo unzip -q ndk.zip -d /tmpNdk/ \
-    && sudo mv /tmpNdk/android-ndk-r21e/ ${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
+    && sudo mv /tmpNdk/android-ndk-r21e/* ${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
     && rm ndk.zip
 
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
