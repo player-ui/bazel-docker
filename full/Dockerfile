@@ -54,6 +54,8 @@ RUN rbenv install $RUBY_VERSION
 RUN rbenv global $RUBY_VERSION
 
 # Install clang
-RUN sudo apt-get install -y wget gnupg lsb-release
-RUN wget -O - https://apt.llvm.org/llvm.sh | sudo bash
-RUN sudo apt-get update && sudo apt-get install -y clang-16
+RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz && \
+    tar -xf clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz && \
+    sudo mv clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz /opt/clang
+
+ENV PATH=opt/clang/bin:${PATH}
