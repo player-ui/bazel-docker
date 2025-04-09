@@ -52,3 +52,6 @@ RUN git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ru
 RUN echo 'eval "$(rbenv init -)"' > ~/.bashrc
 RUN rbenv install $RUBY_VERSION
 RUN rbenv global $RUBY_VERSION
+
+# Install clang
+RUN sudo apt-get install -y clang
