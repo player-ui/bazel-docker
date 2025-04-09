@@ -54,4 +54,4 @@ RUN rbenv install $RUBY_VERSION
 RUN rbenv global $RUBY_VERSION
 
 # Install clang
-RUN sudo apt-get install llvm && sudo apt-get install -y clang
+RUN sudo apt-get update && sudo apt-get install llvm && sudo apt-get install -y clang
