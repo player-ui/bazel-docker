@@ -1,8 +1,8 @@
-FROM cimg/openjdk:17.0-node as base_image
+FROM cimg/openjdk:17.0-node AS base_image
 
 LABEL maintainer="Jeremiah Zucker <zucker.jeremiah@gmail.com>"
 
-ENV BAZELISK_VERSION 1.20.0
+ENV BAZELISK_VERSION=1.20.0
 RUN wget -q https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-amd64 -O bazelisk && \
     chmod +x bazelisk && \
     sudo mkdir /opt/bazelisk-v${BAZELISK_VERSION} && \
@@ -54,8 +54,8 @@ RUN rbenv install $RUBY_VERSION
 RUN rbenv global $RUBY_VERSION
 
 # Install clang
-RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz && \
-    tar -xf clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz && \
-    sudo mkdir /opt/clang && \
-    sudo mv clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz /opt/clang && \
-    sudo ln -s /opt/clang /usr/bin/clang
+RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/clang+llvm-16.0.0-aarch64-linux-gnu.tar.xz && \
+    sudo mkdir -p /opt/clang && \
+    tar -xJf clang+llvm-16.0.0-aarch64-linux-gnu.tar.xz && \
+    sudo mv clang+llvm-16.0.0-aarch64-linux-gnu /opt/clang && \
+    sudo ln -s /opt/clang/clang+llvm-16.0.0-aarch64-linux-gnu/bin/clang /usr/local/bin/clang
