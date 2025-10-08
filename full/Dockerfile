@@ -2,7 +2,7 @@ FROM cimg/openjdk:17.0-node as base_image
 
 LABEL maintainer="Jeremiah Zucker <zucker.jeremiah@gmail.com>"
 
-ENV BAZELISK_VERSION 1.20.0
+ENV BAZELISK_VERSION 1.27.0
 RUN wget -q https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-amd64 -O bazelisk && \
     chmod +x bazelisk && \
     sudo mkdir /opt/bazelisk-v${BAZELISK_VERSION} && \
@@ -52,3 +52,4 @@ RUN git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ru
 RUN echo 'eval "$(rbenv init -)"' > ~/.bashrc
 RUN rbenv install $RUBY_VERSION
 RUN rbenv global $RUBY_VERSION
+RUN USE_BAZEL_VERSION=8.4.2 bazel version
