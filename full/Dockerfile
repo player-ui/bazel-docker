@@ -40,3 +40,7 @@ ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
 RUN sudo ln -sf /usr/bin/python3 /usr/bin/python
+
+RUN sudo apt-get update \
+    && sudo apt-get install libicu-dev -y \
+    && sudo rm -rf /var/lib/apt/lists/*
