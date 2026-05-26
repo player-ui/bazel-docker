@@ -1,8 +1,8 @@
-FROM cimg/openjdk:17.0-node as base_image
+FROM cimg/openjdk:17.0-node AS base_image
 
 LABEL maintainer="Jeremiah Zucker <zucker.jeremiah@gmail.com>"
 
-ENV BAZELISK_VERSION 1.29.0
+ENV BAZELISK_VERSION=1.29.0
 RUN wget -q https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-amd64 -O bazelisk && \
     chmod +x bazelisk && \
     sudo mkdir /opt/bazelisk-v${BAZELISK_VERSION} && \
@@ -37,6 +37,6 @@ RUN sudo /opt/android/cmdline-tools/latest/bin/sdkmanager "build-tools;${ANDROID
 
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
-    PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_TOOLS}
+    PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
 RUN sudo ln -sf /usr/bin/python3 /usr/bin/python
