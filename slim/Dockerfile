@@ -10,4 +10,5 @@ RUN wget -q https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK
     chmod +x bazelisk && \
     sudo mkdir /opt/bazelisk-v${BAZELISK_VERSION} && \
     sudo mv bazelisk /opt/bazelisk-v${BAZELISK_VERSION} && \
-    sudo ln -s /opt/bazelisk-v${BAZELISK_VERSION}/bazelisk /usr/local/bin/bazel
+    sudo ln -s /opt/bazelisk-v${BAZELISK_VERSION}/bazelisk /usr/local/bin/bazel && \
+    USE_BAZEL_VERSION=8.4.2 bazel version
