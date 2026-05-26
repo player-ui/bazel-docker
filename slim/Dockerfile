@@ -2,7 +2,7 @@ FROM cimg/node:22.21 as base_image
 
 LABEL maintainer="Ketan Reddy <ketan@ketanreddy.com>"
 
-ENV BAZELISK_VERSION 1.27.0
+ENV BAZELISK_VERSION 1.29.0
 
 SHELL ["/bin/bash", "-l", "-c"]
 

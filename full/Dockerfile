@@ -27,7 +27,7 @@ RUN yes | sudo ${CMD_LINE_TOOLS}/bin/sdkmanager --licenses || if [ $? -ne '141' 
 RUN yes | sudo ${CMD_LINE_TOOLS}/bin/sdkmanager --update || if [ $? -ne '141' ]; then exit $?; fi;
 
 ENV ANDROID_VERSION=35 \
-    ANDROID_BUILD_TOOLS_VERSION=35.0.2 \
+    ANDROID_BUILD_TOOLS_VERSION=35.0.1 \
     ANDROID_NDK_VERSION=27.1.12297006
 
 RUN sudo /opt/android/cmdline-tools/latest/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
