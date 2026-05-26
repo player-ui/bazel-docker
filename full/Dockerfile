@@ -28,12 +28,12 @@ RUN yes | sudo ${CMD_LINE_TOOLS}/bin/sdkmanager --update || if [ $? -ne '141' ];
 
 ENV ANDROID_VERSION=33 \
     ANDROID_BUILD_TOOLS_VERSION=33.0.1 \
-    ANDROID_NDK_VERSION=23.2.8568313
+    ANDROID_NDK_VERSION=27.1.12297006
 
 RUN sudo /opt/android/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.1" \
     "platforms;android-33" \
     "platform-tools" \
-    "ndk;23.2.8568313"
+    "ndk;27.1.12297006"
 
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
