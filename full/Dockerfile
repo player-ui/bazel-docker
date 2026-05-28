@@ -1,8 +1,8 @@
-FROM cimg/openjdk:17.0-node as base_image
+FROM cimg/openjdk:17.0-node AS base_image
 
 LABEL maintainer="Jeremiah Zucker <zucker.jeremiah@gmail.com>"
 
-ENV BAZELISK_VERSION 1.27.0
+ENV BAZELISK_VERSION=1.29.0
 RUN wget -q https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-amd64 -O bazelisk && \
     chmod +x bazelisk && \
     sudo mkdir /opt/bazelisk-v${BAZELISK_VERSION} && \
@@ -26,29 +26,21 @@ RUN sudo chmod +x ${ANDROID_HOME}/license_accepter.sh && \
 RUN yes | sudo ${CMD_LINE_TOOLS}/bin/sdkmanager --licenses || if [ $? -ne '141' ]; then exit $?; fi;
 RUN yes | sudo ${CMD_LINE_TOOLS}/bin/sdkmanager --update || if [ $? -ne '141' ]; then exit $?; fi;
 
-ENV ANDROID_VERSION=33 \
-    ANDROID_BUILD_TOOLS_VERSION=33.0.1 \
+ENV ANDROID_VERSION=35 \
+    ANDROID_BUILD_TOOLS_VERSION=35.0.1 \
     ANDROID_NDK_VERSION=27.1.12297006
 
-RUN sudo /opt/android/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.1" \
-    "platforms;android-33" \
+RUN sudo /opt/android/cmdline-tools/latest/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
+    "platforms;android-${ANDROID_VERSION}" \
     "platform-tools" \
-    "ndk;27.1.12297006"
+    "ndk;${ANDROID_NDK_VERSION}"
 
 ENV ANDROID_SDK_HOME=${ANDROID_HOME} \
     ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION} \
-    PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_TOOLS}
+    PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
 RUN sudo ln -sf /usr/bin/python3 /usr/bin/python
 
-ARG RUBY_VERSION=2.7.2
-
-SHELL ["/bin/bash", "-l", "-c"]
-
-# Install rbenv
-RUN sudo apt-get update && sudo apt-get install rbenv -y && sudo rm -rf /var/lib/apt/lists/*
-RUN mkdir -p "$(rbenv root)"/plugins
-RUN git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
-RUN echo 'eval "$(rbenv init -)"' > ~/.bashrc
-RUN rbenv install $RUBY_VERSION
-RUN rbenv global $RUBY_VERSION
+RUN sudo apt-get update \
+    && sudo apt-get install libicu-dev -y \
+    && sudo rm -rf /var/lib/apt/lists/*
