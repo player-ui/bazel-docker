@@ -7,68 +7,118 @@ on:
       - 'main'
 
 jobs:
-  docker:
+  validate-labels:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = context.payload.pull_request.labels.map(l => l.name);
+            const valid = ['major', 'minor', 'patch', 'skip-release'];
+            const found = valid.filter(l => labels.includes(l));
+            if (found.length === 0) {
+              core.setFailed(`PR must have one of the following labels: ${valid.join(', ')}`);
+            }
 
+  build-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            playerui/bazel-docker
-          tags: |
-            type=sha
-
-      -
-        name: Set up QEMU
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-      -
-        name: Set up Docker Buildx
+
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      -
-        name: Login to DockerHub
+
+      - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      -
-        name: Build and push PR (Full)
-        uses: docker/build-push-action@v5
-        if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
+
+      - name: Build and push PR (Full)
+        uses: docker/build-push-action@v6
         with:
           context: ./full
           push: true
           tags: playerui/bazel-docker:${{ github.event.number }}
-          labels: ${{ steps.meta.outputs.labels }}
-      -
-        name: Build and push Main (Full)
-        uses: docker/build-push-action@v5
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        with:
-          context: ./full
-          push: true
-          tags: playerui/bazel-docker:latest
-          labels: ${{ steps.meta.outputs.labels }}
-      -
-        name: Build and push PR (Slim)
-        uses: docker/build-push-action@v5
-        if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
+
+      - name: Build and push PR (Slim)
+        uses: docker/build-push-action@v6
         with:
           context: ./slim
           push: true
           tags: playerui/bazel-docker-slim:${{ github.event.number }}
-          labels: ${{ steps.meta.outputs.labels }}
-      -
-        name: Build and push Main (Slim)
-        uses: docker/build-push-action@v5
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+
+  build-main:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version bump from merged PR
+        id: labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pulls } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+            });
+            const pr = pulls[0];
+            if (!pr) { core.setOutput('bump', 'skip'); return; }
+            const names = pr.labels.map(l => l.name);
+            if (names.includes('major')) core.setOutput('bump', 'major');
+            else if (names.includes('minor')) core.setOutput('bump', 'minor');
+            else if (names.includes('patch')) core.setOutput('bump', 'patch');
+            else core.setOutput('bump', 'skip');
+
+      - name: Bump version and push tag
+        id: tag
+        if: steps.labels.outputs.bump != 'skip'
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release_branches: main
+          tag_prefix: ''
+          default_bump: ${{ steps.labels.outputs.bump }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Main (Full)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./full
+          push: true
+          tags: |
+            playerui/bazel-docker:latest
+            ${{ steps.tag.outputs.new_tag != '' && format('playerui/bazel-docker:{0}', steps.tag.outputs.new_tag) || '' }}
+
+      - name: Build and push Main (Slim)
+        uses: docker/build-push-action@v6
         with:
           context: ./slim
           push: true
-          tags: playerui/bazel-docker-slim:latest
-          labels: ${{ steps.meta.outputs.labels }}
-
+          tags: |
+            playerui/bazel-docker-slim:latest
+            ${{ steps.tag.outputs.new_tag != '' && format('playerui/bazel-docker-slim:{0}', steps.tag.outputs.new_tag) || '' }}
