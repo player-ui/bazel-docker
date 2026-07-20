@@ -44,3 +44,10 @@ RUN sudo ln -sf /usr/bin/python3 /usr/bin/python
 RUN sudo apt-get update \
     && sudo apt-get install libicu-dev -y \
     && sudo rm -rf /var/lib/apt/lists/*
+
+ENV GH_VERSION=2.89.0
+RUN wget -q https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz -O gh.tar.gz && \
+    sudo mkdir -p /opt/gh-v${GH_VERSION} && \
+    sudo tar -xzf gh.tar.gz -C /opt/gh-v${GH_VERSION} --strip-components=1 && \
+    sudo ln -s /opt/gh-v${GH_VERSION}/bin/gh /usr/local/bin/gh && \
+    rm gh.tar.gz
